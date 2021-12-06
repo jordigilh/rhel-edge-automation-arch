@@ -30,3 +30,5 @@ spec:
       tag: {{ .Values.nexus.image.version }}
       pullPolicy: {{ .Values.nexus.persistent.imagePullPolicy }}
     volumeSize: {{ .Values.nexus.persistent.volumeSize }}
+    jvm:
+      memory: {{ .Values.nexus.jvm.memory }}

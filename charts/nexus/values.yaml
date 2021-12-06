@@ -21,10 +21,12 @@ nexus:
     enabled: true
     volumeSize: 100Gi
   image:
-    registry: registry.connect.redhat.com
-    repository: sonatype/nexus-repository-manager
+    registry: quay.io
+    repository: jordigilh/nexus-operator
     version: latest
     imagePullPolicy: IfNotPresent
+  jvm:
+    memory: 512m
 
 setup:
   repositories:
