@@ -21,9 +21,9 @@ nexus:
     enabled: true
     volumeSize: 100Gi
   image:
-    registry: quay.io
-    repository: jordigilh/nexus-operator
-    version: 0.0.11
+    registry: registry.connect.redhat.com
+    repository: sonatype/nexus-repository-manager
+    version: latest
     imagePullPolicy: IfNotPresent
   jvm:
     memory: 512m
