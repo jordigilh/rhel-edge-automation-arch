@@ -6,6 +6,6 @@ defaultsConfigmap:
 
 commonCR:
   annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true,Prune=false
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/compare-options: IgnoreExtraneous
     rgocd.argoproj.io/sync-wave: "5"
