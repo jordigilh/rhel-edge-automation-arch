@@ -4,7 +4,9 @@ kubevirtCR:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     deployOVS: "false"
   labels:
-    app: kubevirt-hyperconverged
+    app: kubevirt-cr
+  featureGates:
+    - DataVolume  
 cnv:
   debug:
     useEmulation: "false"
