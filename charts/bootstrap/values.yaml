@@ -236,6 +236,10 @@ application-manager:
                 ansible-rfe-runner:
                   name: ansible-rfe-runner
                   path: charts/ansible-rfe-runner
+                # Image Builder VM
+                image-builder-vm:
+                  name: image-builder-vm
+                  path: charts/image-builder-vm       
                 # HTTPD Chart
                 httpd:
                   name: httpd
