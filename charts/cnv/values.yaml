@@ -6,7 +6,7 @@ kubevirtCR:
   labels:
     app: kubevirt-cr
   featureGates:
-    - DataVolume  
+    - DataVolumes
 cnv:
   debug:
-    useEmulation: "false"
+    useEmulation: false

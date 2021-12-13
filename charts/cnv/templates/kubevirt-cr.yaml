@@ -6,7 +6,8 @@ metadata:
     {{- toYaml .Values.kubevirtCR.annotations | nindent 4 }}
   labels:
     {{- include "common.labels.labels" . | nindent 4 }}
-    {{- toYaml .Values.kubevirtCR.labels | nindent 4 }}  
+    {{- toYaml .Values.kubevirtCR.labels | nindent 4 }}
+  name: rfe
 spec:
   certificateRotateStrategy:
     selfSigned:
@@ -22,7 +23,7 @@ spec:
       {{- range $feature := .Values.kubevirtCR.featureGates }}
       - {{$feature }}
       {{- end }}     
-      useEmulation: "{{ $.Values.cnv.debug.useEmulation }}"
+      useEmulation: {{ $.Values.cnv.debug.useEmulation }}
   customizeComponents: {}
   uninstallStrategy: BlockUninstallIfWorkloadsExist
   workloadUpdateStrategy: {}
