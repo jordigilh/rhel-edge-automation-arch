@@ -1,0 +1,3 @@
+---
+base_build_rpm_dir: /tmp/rpm-build/
+rpm_build_directory: /tmp/rpmbuild

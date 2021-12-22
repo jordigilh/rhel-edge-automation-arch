@@ -1,0 +1,50 @@
+- name: Create build directory
+  ansible.builtin.file:
+    path: {{ base_build_rpm_dir }}
+    state: directory
+
+- name: Install Packages
+  ansible.builtin.dnf:
+    state: latest
+    name:
+      - dbus-devel
+      - systemd-devel
+      - git
+      - golang
+      - rpm-build
+
+- name: Clean rpm build directory
+  ansible.builtin.command: rpm -Rf {{ rpm_build_directory }}/*
+
+- name: Build Yggdrasil
+  community.general.make:
+    chdir: {{ base_build_rpm_dir }}/yggdrasil
+    target: srpm
+    file: .copr/Makefile
+    params:
+      CGO_ENABLED: 0
+      ARCH: {{ build_architecture }}
+      GOPROXY: proxy.golang.org
+      PWD: {{ base_build_rpm_dir }}
+      spec: {{ base_build_rpm_dir }}
+      outdir: {{ base_build_rpm_dir }}
+
+- name: Check package name
+  chdir: {{ base_build_rpm_dir }}/yggdrasil
+  ansible.builtin.command: ls -ltr yggdrasil-*.src.rpm | tail -n 1 | awk '{print $NF}'
+  register: package_version
+
+- name: Install SRPM package
+  ansible.builtin.dnf:
+    name: {{ base_build_rpm_dir }}/yggdrasil/yggdrasil-{{ package_version.stdout }}.src.rpm
+    state: present
+
+- name: Turn ELF binary stripping off in %post
+  ansible.builtin.lineinfile:
+    path: {{ rpm_build_directory }}/SPECS/yggdrasil.spec
+    insertafter: '^'
+    line: '%global __os_install_post %{nil}'
+  when: "{{ lookup('env','ARCH') }}" == "aarch64"
+
+- name: Run RPMBuild for Yggdrasil
+  ansible.builtin.command: rpmbuild -bb {{ rpm_build_directory }}/SPECS yggdrasil.spec --target {{ lookup('env','ARCH') }}
