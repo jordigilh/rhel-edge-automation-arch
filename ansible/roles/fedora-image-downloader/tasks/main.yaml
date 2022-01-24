@@ -2,12 +2,10 @@
   ansible.builtin.uri:
     follow_redirects: "no"
     status_code: 302
-    url: "{{ fedora_base_url }}/{{ item }}"
-  register: image_urls
-  loop: "{{ image_paths }}"
+    url: "{{ fedora_url }}"
+  register: image_url
 
 - name: Download Fedora Images
   ansible.builtin.get_url:
-    dest: "{{ initial_download_path }}/{{ item.item.split('/') | last }}"
-    url: "{{ item.location }}"
-  loop: "{{ image_urls.results }}"
+    dest: "{{ initial_download_path }}/{{ fedora_url.split('/') | last }}"
+    url: "{{ image_url.location }}"
