@@ -161,7 +161,6 @@
     name:
       - osbuild-composer
       - composer-cli
-      - cockpit-composer
       - bash-completion
       - firewalld
       - genisoimage
@@ -175,7 +174,6 @@
     name: "{{ item }}"
   loop:
     - osbuild-composer.socket
-    - cockpit.socket
     - httpd.service
     - firewalld
 
@@ -186,7 +184,6 @@
     service: "{{ item }}"
     state: enabled
   loop:
-    - cockpit
     - http
 
 - name: Manage Composer Sources
