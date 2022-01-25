@@ -28,7 +28,6 @@
         - name: Capture RHEL Filenames
           set_fact: 
             filenames: "{{ filenames | default([]) | union([item.json.body.filename]) }}"
-          no_log: true
           loop: "{{ image_urls.results }}"
       when: "os_distribution == 'rhel'"
 
