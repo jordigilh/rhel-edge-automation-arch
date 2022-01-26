@@ -9,6 +9,9 @@
   become: yes
   gather_facts: no
   hosts: image-builder
+  pre_tasks:
+   - setup:
+       filter: ansible_distribution  
   tasks:
     - name: Build OCI Image
       include_role:

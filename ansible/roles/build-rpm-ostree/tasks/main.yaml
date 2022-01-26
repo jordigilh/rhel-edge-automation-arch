@@ -49,9 +49,12 @@
 
 - name: Image Builder
   block:
+    - name: Define Image Type
+      set_fact:
+        image_type: "{{ 'edge-commit' if ansible_distribution == 'RedHat' else 'commit' if ansible_distribution == 'Fedora' }}"
     - name: Compose Image
       command: >
-        composer-cli -j compose start {{ blueprint_name}} rhel-edge-commit
+        composer-cli -j compose start {{ blueprint_name}} {{ image_type }}
       register: composed_image
 
     - name: Set Build Number

@@ -51,9 +51,13 @@
 
 - name: Generate ISO
   block:
+    - name: Define Image Type
+      set_fact:
+        image_type: "{{ 'edge-installer' if ansible_distribution == 'RedHat' else 'iot-installer' if ansible_distribution == 'Fedora' }}"
+        distribution_name: "{{ 'rhel' if ansible_distribution =='RedHat' else 'fedora' if ansible_distribution =='Fedora' }}"
     - name: Compose Image
       ansible.builtin.command: >
-        composer-cli -j compose start-ostree --ref rhel/8/x86_64/edge --url {{ ostree_repo_url }} {{ blueprint_name }} rhel-edge-installer
+        composer-cli -j compose start-ostree --ref {{ distribution_name }}/8/x86_64/edge --url {{ ostree_repo_url }} {{ blueprint_name }} {{ image_type }}
       register: composed_image
 
     - name: Set Build Commit ID

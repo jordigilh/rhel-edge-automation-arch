@@ -49,9 +49,12 @@
 
 - name: Image Builder
   block:
+    - name: Define Image Type
+      set_fact:
+        image_type: "{{ 'edge-container' if ansible_distribution == 'RedHat' else 'iot-container' if ansible_distribution == 'Fedora' }}"
     - name: Compose Image
-      ansible.builtin.command: >
-        composer-cli -j compose start-ostree {{ blueprint_name }} rhel-edge-container
+      command: >
+        composer-cli -j compose start-ostree {{ blueprint_name}} {{ image_type }}
       register: composed_image
 
     - name: Set Build Commit ID
@@ -71,6 +74,7 @@
       until: >
         (image_build_status.stdout | from_json | selectattr('id', 'equalto', build_commit_id) | list | first).finished and
         (image_build_status.stdout | from_json | selectattr('id', 'equalto', build_commit_id) | list | first).status == "FINISHED"
+  when: ansible_distribution == 'RedHat'
 
 - name: Save Build Commit ID to File
   ansible.builtin.copy:

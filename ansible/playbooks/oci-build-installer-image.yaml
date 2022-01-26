@@ -6,5 +6,8 @@
 - name: Generate RFE Boot ISO Image
   become: yes
   hosts: image-builder
+  pre_tasks:
+   - setup:
+       filter: ansible_distribution
   roles:
     - role: oci-build-installer-image
