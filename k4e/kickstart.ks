@@ -42,7 +42,7 @@ cert-file = "/etc/pki/consumer/cert.pem"
 key-file = "/etc/pki/consumer/key.pem"
 transport = "http"
 client-id-source = "machine-id"
-http-server = "${HTTP_API}"
+http-server = "{{ yggdrasil_http_api_url }}"
 EOF
 mkdir -p /etc/pki/consumer
 openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/pki/consumer/cert.pem -keyout /etc/pki/consumer/key.pem -subj /CN=k4e-agent
