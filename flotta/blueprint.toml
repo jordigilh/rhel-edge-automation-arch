@@ -1,5 +1,5 @@
-name = "k4e"
-description = "RHEL for Edge"
+name = "flotta"
+description = "Flotta RHEL for Edge"
 version = "0.0.1"
 modules = []
 groups = []
