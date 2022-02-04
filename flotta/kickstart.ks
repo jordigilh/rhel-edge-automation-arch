@@ -22,7 +22,7 @@ text
 network --bootproto=dhcp
 
 # set up the OSTree-based install
-ostreesetup --nogpg --url={{ ostree_repo_url }} --osname=rhel --remote=edge --ref=rhel/8/x86_64/edge
+ostreesetup --nogpg --url={{ ostree_repo_url }} --osname={{ os_name }} --remote=edge --ref=rhel/8/x86_64/edge
 %post
 
 #################################################
