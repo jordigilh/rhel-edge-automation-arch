@@ -54,3 +54,5 @@ systemctl enable --now yggdrasild.service
 
 # FIXME: enable root password for debug purposes, should be removed in production
 echo root | passwd --stdin root
+
+%end
