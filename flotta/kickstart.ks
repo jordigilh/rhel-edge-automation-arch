@@ -22,7 +22,7 @@ text
 network --bootproto=dhcp
 
 # set up the OSTree-based install
-ostreesetup --nogpg --url={{ ostree_repo_url }} --osname=rhel --remote=edge --ref=rhel/8/x86_64/edge
+ostreesetup --nogpg --url={{ ostree_repo_url }} --osname={{ os_name }} --remote=edge --ref=rhel/8/x86_64/edge
 %post
 
 #################################################
@@ -54,3 +54,5 @@ systemctl enable --now yggdrasild.service
 
 # FIXME: enable root password for debug purposes, should be removed in production
 echo root | passwd --stdin root
+
+%end
