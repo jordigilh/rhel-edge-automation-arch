@@ -45,36 +45,30 @@
 
 - name: Set Blueprint Version Number
   ansible.builtin.set_fact:
-    blueprint_version: "{{ (frozen_blueprint.stdout | from_json).blueprints[0].blueprint.version }}"
+    blueprint_version: "{{ (frozen_blueprint.stdout | from_json).body.blueprints[0].blueprint.version }}"
 
-- name: Image Builder
-  block:
-    - name: Define Image Type
-      set_fact:
-        image_type: "{{ 'edge-container' if ansible_distribution == 'RedHat' else 'iot-container' if ansible_distribution == 'Fedora' }}"
-    - name: Compose Image
-      command: >
-        composer-cli -j compose start-ostree {{ blueprint_name}} {{ image_type }}
-      register: composed_image
+- name: Define Image Type
+  set_fact:
+    image_type: "{{ 'edge-container' if ansible_distribution == 'RedHat' else 'iot-container' if ansible_distribution == 'Fedora' }}"
+- name: Output image type
+  debug:
+    msg: Image type is {{ image_type }} 
+- name: Compose Image
+  command: >
+    composer-cli compose start-ostree {{ blueprint_name}} {{ image_type }}
+  register: build_commit_id
 
-    - name: Set Build Commit ID
-      ansible.builtin.set_fact:
-        build_commit_id: "{{ (composed_image.stdout | from_json).build_id }}"
-
-    - name: Wait for Image Build to Complete
-      ansible.builtin.command: >
-        composer-cli -j compose status
-      changed_when: false
-      delay: 30
-      failed_when: >
-        not (image_build_status.stdout | from_json | selectattr('id', 'equalto', build_commit_id) | list | first).finished and
-        (image_build_status.stdout | from_json | selectattr('id', 'equalto', build_commit_id) | list | first).status != "FINISHED"
-      register: image_build_status
-      retries: 200
-      until: >
-        (image_build_status.stdout | from_json | selectattr('id', 'equalto', build_commit_id) | list | first).finished and
-        (image_build_status.stdout | from_json | selectattr('id', 'equalto', build_commit_id) | list | first).status == "FINISHED"
-  when: ansible_distribution == 'RedHat'
+- name: Wait for Image Build to Complete
+  ansible.builtin.command: >
+    composer-cli -j compose status
+  changed_when: false
+  delay: 30
+  failed_when: >
+    (image_build_status.stdout | from_json | selectattr('id', 'equalto', build_commit_id) | list | first).queue_status != "FINISHED"
+  register: image_build_status
+  retries: 200
+  until: >
+    (image_build_status.stdout | from_json | selectattr('id', 'equalto', build_commit_id) | list | first).queue_status == "FINISHED"
 
 - name: Save Build Commit ID to File
   ansible.builtin.copy:

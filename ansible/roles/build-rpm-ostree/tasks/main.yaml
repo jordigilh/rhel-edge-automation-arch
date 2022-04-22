@@ -45,7 +45,7 @@
 
 - name: Set Blueprint Version Number
   set_fact:
-    blueprint_version: "{{ (frozen_blueprint.stdout | from_json).blueprints[0].blueprint.version }}"
+    blueprint_version: "{{ (frozen_blueprint.stdout | from_json).body.blueprints[0].blueprint.version }}"
 
 - name: Image Builder
   block:
